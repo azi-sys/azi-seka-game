@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AZI • SEKA • ТРЕНЬКА</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#07110e;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+.app{
+  max-width:520px;
+  margin:auto;
+  min-height:100vh;
+  padding:18px;
+  background:
+    radial-gradient(circle at top,#173d30 0,#07110e 45%);
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#d9a441;
+}
+
+.balance{
+  background:#17271f;
+  border:1px solid #3d654f;
+  padding:10px 14px;
+  border-radius:14px;
+  color:#ffd66b;
+  font-weight:bold;
+}
+
+.hero{
+  padding:24px 20px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#163c2d,#0b1d16);
+  border:1px solid #3b654e;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+}
+
+.hero p{
+  color:#aebdb6;
+  margin:0;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:bold;
+  margin:20px 0 12px;
+}
+
+.games{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.game{
+  border:1px solid #315543;
+  background:#10251c;
+  border-radius:18px;
+  padding:18px 8px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.game:active{
+  transform:scale(.96);
+}
+
+.game .icon{
+  font-size:34px;
+  margin-bottom:8px;
+}
+
+.game b{
+  display:block;
+}
+
+.game small{
+  color:#91a79c;
+}
+
+.tables{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.table{
+  background:#10251c;
+  border:1px solid #315543;
+  border-radius:17px;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.table-info b{
+  display:block;
+  margin-bottom:5px;
+}
+
+.table-info small{
+  color:#91a79c;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  background:#d9a441;
+  color:#171006;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.screen{
+  display:none;
+}
+
+.back{
+  margin-bottom:15px;
+  background:#17271f;
+  color:white;
+  border:1px solid #3d654f;
+}
+
+.cards{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:25px 0;
+}
+
+.card{
+  width:65px;
+  height:92px;
+  border-radius:10px;
+  background:#fff;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold;
+  box-shadow:0 5px 15px #0008;
+}
+
+.play-area{
+  background:#123425;
+  border:1px solid #416d55;
+  border-radius:25px;
+  padding:20px;
+  text-align:center;
+  min-height:300px;
+}
+
+.message{
+  color:#c8d5cf;
+  margin:15px 0;
+}
+
+.footer{
+  text-align:center;
+  color:#60756a;
+  margin:30px 0 10px;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="logo">AZI <span>•</span> SEKA</div>
+    <div class="balance">🪙 <span id="balance">10000</span></div>
+  </div>
+
+  <div id="home">
+
+    <div class="hero">
+      <h1>AZI • SEKA • ТРЕНЬКА</h1>
+      <p>Карточные игры с виртуальными фишками</p>
+    </div>
+
+    <div class="section-title">Выберите игру</div>
+
+    <div class="games">
+
+      <div class="game" onclick="openGame('AZI')">
+        <div class="icon">🃏</div>
+        <b>AZI</b>
+        <small>Карты</small>
+      </div>
+
+      <div class="game" onclick="openGame('SEKA')">
+        <div class="icon">♠️</div>
+        <b>SEKA</b>
+        <small>Карты</small>
+      </div>
+
+      <div class="game" onclick="openTraining()">
+        <div class="icon">🤖</div>
+        <b>ТРЕНЬКА</b>
+        <small>Боты</small>
+      </div>
+
+    </div>
+
+    <div class="section-title">Столы</div>
+
+    <div class="tables">
+
+      <div class="table">
+        <div class="table-info">
+          <b>🟢 Новички</b>
+          <small>Ставка: 100 🪙</small>
+        </div>
+        <button class="btn" onclick="startDemo(100)">Войти</button>
+      </div>
+
+      <div class="table">
+        <div class="table-info">
+          <b>🔥 Средний</b>
+          <small>Ставка: 500 🪙</small>
+        </div>
+        <button class="btn" onclick="startDemo(500)">Войти</button>
+      </div>
+
+      <div class="table">
+        <div class="table-info">
+          <b>👑 VIP</b>
+          <small>Ставка: 1000 🪙</small>
+        </div>
+        <button class="btn" onclick="startDemo(1000)">Войти</button>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      AZI • SEKA • ТРЕНЬКА<br>
+      Только виртуальные фишки
+    </div>
+
+  </div>
+
+  <div id="gameScreen" class="screen">
+
+    <button class="btn back" onclick="goHome()">← Назад</button>
+
+    <div class="play-area">
+
+      <h2 id="gameTitle">AZI</h2>
+
+      <p class="message" id="gameMessage">
+        Игра готова к началу
+      </p>
+
+      <div class="cards">
+        <div class="card" id="card1">?</div>
+        <div class="card" id="card2">?</div>
+        <div class="card" id="card3">?</div>
+      </div>
+
+      <button class="btn" onclick="dealCards()">
+        🎴 Раздать карты
+      </button>
+
+      <p id="result"></p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+let balance = 10000;
+let currentGame = "AZI";
+
+function updateBalance(){
+  document.getElementById("balance").innerText =
+    balance.toLocaleString("ru-RU");
+}
+
+function openGame(game){
+
+  currentGame = game;
+
+  document.getElementById("home").style.display="none";
+  document.getElementById("gameScreen").style.display="block";
+
+  document.getElementById("gameTitle").innerText=game;
+
+  document.getElementById("gameMessage").innerText=
+    "Добро пожаловать в " + game;
+
+  document.getElementById("result").innerText="";
+}
+
+function openTraining(){
+
+  currentGame="ТРЕНЬКА";
+
+  document.getElementById("home").style.display="none";
+  document.getElementById("gameScreen").style.display="block";
+
+  document.getElementById("gameTitle").innerText="🤖 ТРЕНЬКА";
+
+  document.getElementById("gameMessage").innerText=
+    "Ты играешь против бота";
+
+  document.getElementById("result").innerText="";
+}
+
+function startDemo(bet){
+
+  if(balance < bet){
+    alert("Недостаточно фишек");
+    return;
+  }
+
+  balance -= bet;
+  updateBalance();
+
+  openGame("AZI");
+
+  document.getElementById("gameMessage").innerText=
+    "Ставка " + bet + " 🪙 принята";
+}
+
+function dealCards(){
+
+  const suits=["♠","♥","♦","♣"];
+
+  function randomCard(){
+    const values=[
+      "A","2","3","4","5","6","7","8","9","10","J","Q","K"
+    ];
+
+    return values[Math.floor(Math.random()*values.length)]
+      + suits[Math.floor(Math.random()*suits.length)];
+  }
+
+  document.getElementById("card1").innerText=randomCard();
+  document.getElementById("card2").innerText=randomCard();
+  document.getElementById("card3").innerText=randomCard();
+
+  const win=Math.random()>0.5;
+
+  if(win){
+
+    balance += 200;
+    document.getElementById("result").innerText=
+      "🎉 Победа! +200 🪙";
+
+  }else{
+
+    document.getElementById("result").innerText=
+      "😎 Попробуй ещё раз";
+
+  }
+
+  updateBalance();
+}
+
+function goHome(){
+
+  document.getElementById("gameScreen").style.display="none";
+  document.getElementById("home").style.display="block";
+
+}
+
+updateBalance();
+
+if(window.Telegram && Telegram.WebApp){
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+}
+
+</script>
+
+</body>
+</html>
